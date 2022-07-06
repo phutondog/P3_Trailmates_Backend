@@ -1,32 +1,30 @@
-package com.revature.trailmates.user;
+package com.revature.trailmates.user.dtos.requests;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import javax.persistence.Column;
+import javax.persistence.Id;
 
-import javax.persistence.*;
+public class EditUserRequest {
 
-
-//This is the class that defines the user
-
-@Entity
-@Table(name = "users")
-public class User {
-
-    @Id
     private String id;
-    @Column (name="username", nullable = false)
     private String username;
-    @Column (name="password", nullable = false)
     private String password;
-    @Column (name="email", nullable = false)
     private String email;
-    @Column (name="role", nullable = false)
     private String role;
-    @Column (name="bio")
     private String bio;
-    @Column (name="age")
     private int age;
 
-    //<editor-fold desc="get/set>
+    public EditUserRequest(){}
+    public EditUserRequest(String id, String username, String password, String email, String role, String bio, int age) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.bio = bio;
+        this.age = age;
+    }
+
+    //<editor-fold desc="get/set">
 
     public String getId() {
         return id;
@@ -84,6 +82,6 @@ public class User {
         this.age = age;
     }
 
-    //</editor-fold desc="get/set>
+    //</editor-fold desc="get/set">
 
 }
