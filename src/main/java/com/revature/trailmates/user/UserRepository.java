@@ -26,4 +26,10 @@ public interface UserRepository extends CrudRepository<User, String> {
     public User save(User user);
     //</editor-fold desc="Save">
 
+    //<editor-fold desc="Update User">
+    @Modifying
+    @Query (value = "UPDATE users SET email = ?1, bio = ?2, age = ?3 WHERE id = ?4", nativeQuery = true)
+    void updateUser(String email, String bio, int age, String id);
+    //</editor-fold desc="Update User">
+
 }
