@@ -14,25 +14,27 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
 @Service
+@Transactional
 public class TokenService {
     @Inject
     private JwtConfig jwtConfig;
-    /*private UserService userService;*/
+    private UserService userService;
 
     public TokenService() {
         super();
     }
 
-    /*@Inject
+    @Inject
     @Autowired
     public TokenService(JwtConfig jwtConfig, UserService userService) {
         this.jwtConfig = jwtConfig;
         this.userService = userService;
-    }*/
+    }
 
 
 
@@ -66,12 +68,12 @@ public class TokenService {
         }
     }
 
-    /*public Principal noTokenThrow(String token){
+    public Principal noTokenThrow(String token){
         Principal requester = extractRequesterDetails(token);
         if(requester == null) throw new UnauthorizedException("No authorization found");//401
         User user = userService.getUserByUsername(requester.getUsername());
         if(user == null) throw new InvalidRequestException("Invalid user token");//404
         //if(!user.getIsActive()) throw new AuthenticationException("Inactive user token");//403
         return requester;
-    }*/
+    }
 }
