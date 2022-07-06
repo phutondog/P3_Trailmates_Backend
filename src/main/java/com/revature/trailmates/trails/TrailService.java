@@ -1,16 +1,14 @@
 package com.revature.trailmates.trails;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.trailmates.util.annotations.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,31 +25,39 @@ public class TrailService {
         this.trailRepository = trailRepository;
     }
 
+    public List<Trail> searchTrailByName(String name) {
+        List<Trail> trails = trailRepository.getAllTrails();
+        List<Trail> searchedTrails = new ArrayList<>();
 
-
-    public List<Trail> searchTrailByName(String name, int page) {
-        List<Trail> trails = new ArrayList<>();
-        JsonNode temp = trailAPIConnector.getAllPlainJSON(0);
-
-        int total = temp.get("total").asInt();
-        for (int i = 0; i < total/10; i++) {
-            JsonNode content = trailAPIConnector.getAllPlainJSON(i);
-
-            int totalTemp = content.get("total").asInt() - (i * 10);
-            if (totalTemp > 10) {
-                for (int j = 0; j < 10; j++) {
-                    trails.add(getTrailAPI(content.at("/data").get(j).get("id").asText()));
-                }
-            }
-            else if (totalTemp > 0){
-                for (int j = 0; j < totalTemp; j++) {
-                    trails.add(getTrailAPI(content.at("/data").get(j).get("id").asText()));
-                }
-            }
+        for (int i = 0; i < trails.size(); i++) {
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                if (trails.get(i).getName().toLowerCase().contains(name.toLowerCase())) searchedTrails.add(trails.get(i));
+            } catch (IndexOutOfBoundsException ignore) { }
+        }
+        return searchedTrails;
+    }
+
+    public Optional<Trail> getTrail(String id) {
+        return trailRepository.findById(id);
+    }
+
+    public List<Trail> getAllTrails() {
+        return trailRepository.getAllTrails();
+    }
+
+    public List<Trail> getAllTrailsPage(int page) {
+        List<Trail> allTrails = trailRepository.getAllTrails();
+        List<Trail> trails = new ArrayList<>();
+
+        int total = allTrails.size() - (page * 10);
+        if (total > 10) {
+            for (int i = 0; i < 10; i++) {
+                trails.add(allTrails.get(page*10 + i));
+            }
+        }
+        else if (total > 0){
+            for (int i = 0; i < total; i++) {
+                trails.add(allTrails.get(page*10 + i));
             }
         }
         return trails;

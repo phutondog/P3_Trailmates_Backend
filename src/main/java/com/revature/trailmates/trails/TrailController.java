@@ -2,11 +2,11 @@ package com.revature.trailmates.trails;
 
 import com.revature.trailmates.util.annotations.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/trail")
@@ -23,15 +23,18 @@ public class TrailController {
 
     @CrossOrigin
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Trail getTrailById(@PathVariable String id) { return trailService.getTrailAPI(id); }
+    public @ResponseBody Optional<Trail> getTrailById(@PathVariable String id) { return trailService.getTrail(id); }
 
     @CrossOrigin
     @GetMapping(value = "/getAll/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Trail> getAllTrails(@PathVariable int page) { return trailService.getAllTrailsAPI(page); }
+    public @ResponseBody List<Trail> getAllTrails(@PathVariable int page) { return trailService.getAllTrailsPage(page); }
+
+    @CrossOrigin
+    @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Trail> getAllTrails() { return trailService.getAllTrails(); }
 
     @CrossOrigin
     @GetMapping(value = "search/{search_name}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Trail> searchTrailByName(@PathVariable String search_name) { return trailService.searchTrailByName(search_name, 0); }
-
+    public @ResponseBody List<Trail> searchTrailByName(@PathVariable String search_name) { return trailService.searchTrailByName(search_name); }
 
 }
