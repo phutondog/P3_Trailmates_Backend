@@ -12,6 +12,9 @@ import java.util.List;
 @Repository
 public interface TrailHistoryRepository extends CrudRepository<TrailHistory, String> {
 
-    @Query(value = "select * from trailhistory where user_id = ?1", nativeQuery = true)
-    List<History> getUserHistory(String userID);
+    @Query(value = "select * from trailhistory where user_id = ?1 order by trailDate ASC", nativeQuery = true)
+    List<History> getAscHistory(String userID);
+
+    @Query(value = "select * from trailhistory where user_id = ?1 order by trailDate DESC", nativeQuery = true)
+    List<History> getDescHistory(String userID);
 }

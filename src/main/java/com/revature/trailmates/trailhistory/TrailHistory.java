@@ -1,6 +1,8 @@
 package com.revature.trailmates.trailhistory;
 
 
+import com.revature.trailmates.user.User;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -17,7 +19,7 @@ public class TrailHistory {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private String user;
+    private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "trail_id", referencedColumnName = "id")
@@ -51,11 +53,11 @@ public class TrailHistory {
         this.date = date;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -65,5 +67,16 @@ public class TrailHistory {
 
     public void setTrail(String trail) {
         this.trail = trail;
+    }
+
+    @Override
+    public String toString() {
+        return "TrailHistory{" +
+                "id='" + id + '\'' +
+                ", comment='" + comment + '\'' +
+                ", date=" + date +
+                ", user=" + user +
+                ", trail='" + trail + '\'' +
+                '}';
     }
 }

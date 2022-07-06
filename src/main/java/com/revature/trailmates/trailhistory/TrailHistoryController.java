@@ -1,6 +1,8 @@
 package com.revature.trailmates.trailhistory;
 
 
+import com.revature.trailmates.auth.TokenService;
+import com.revature.trailmates.auth.dtos.response.Principal;
 import com.revature.trailmates.trailhistory.dto.response.History;
 import com.revature.trailmates.util.annotations.Inject;
 import com.revature.trailmates.util.custom_exception.AuthenticationException;
@@ -25,6 +27,9 @@ public class TrailHistoryController {
     @Autowired
     private TrailHistoryService trailHistoryService;
 
+    @Autowired
+    private TokenService tokenService;
+
     public TrailHistoryController() {
         super();
     }
@@ -34,38 +39,23 @@ public class TrailHistoryController {
      */
     @ResponseStatus(HttpStatus.ACCEPTED)
     @CrossOrigin
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<History> trailHistory(){
-
-        return null;
+    @GetMapping(path = "/desc", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<History> descendingTrailHistory(@RequestHeader("Authorization") String token){
+        Principal user = tokenService.noTokenThrow(token);
+        return trailHistoryService.getDescHistory(user.getId());
     }
 
     /**
-     * @return returns a sorted trail history for a specific user in ascending order
+     * @return returns a list of history sorted in ascending order
      */
     @ResponseStatus(HttpStatus.ACCEPTED)
     @CrossOrigin
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/asc", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<History> sortedTrailHistory(){
-
-        return null;
+    List<History> ascendingTrailHistory(@RequestHeader("Authorization") String token){
+        Principal user = tokenService.noTokenThrow(token);
+        return trailHistoryService.getAscHistory(user.getId());
     }
-
-    /**
-     * @param filter takes in a string that will be used to filter
-     * @return returns a list of history matching the string for a user
-     */
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @CrossOrigin
-    @GetMapping(value = "/{filter}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<History> filterTrailHistory(@PathVariable String filter){
-
-        return null;
-    }
-
-
-
 
 
     //region Exception Handlers
