@@ -3,6 +3,8 @@ package com.revature.trailmates.auth;
 
 
 import com.revature.trailmates.auth.dtos.response.Principal;
+import com.revature.trailmates.user.User;
+import com.revature.trailmates.user.UserService;
 import com.revature.trailmates.util.annotations.Inject;
 import com.revature.trailmates.util.custom_exception.AuthenticationException;
 import com.revature.trailmates.util.custom_exception.InvalidRequestException;
@@ -69,7 +71,7 @@ public class TokenService {
         if(requester == null) throw new UnauthorizedException("No authorization found");//401
         User user = userService.getUserByUsername(requester.getUsername());
         if(user == null) throw new InvalidRequestException("Invalid user token");//404
-        if(!user.getIsActive()) throw new AuthenticationException("Inactive user token");//403
+        //if(!user.getIsActive()) throw new AuthenticationException("Inactive user token");//403
         return requester;
     }*/
 }
