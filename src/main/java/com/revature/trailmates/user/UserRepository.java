@@ -1,0 +1,29 @@
+package com.revature.trailmates.user;
+
+
+//This is the class that talks to the database.
+
+
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
+
+public interface UserRepository extends CrudRepository<User, String> {
+
+    //<editor-fold desc="Query">
+
+    @Query (value = "SELECT * FROM users WHERE id = ?1", nativeQuery = true)
+    User getUserByID(String id);
+    @Query (value = "SELECT * FROM users WHERE username = ?1", nativeQuery = true)
+    User getUserByUsername(String username);
+    //</editor-fold desc="Query>
+
+    //<editor-fold desc="Save">
+    @Modifying
+    @Query (value = "INSERT INTO users (id, username, password, email, role, bio, age) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)", nativeQuery = true)
+    public User save(User user);
+    //</editor-fold desc="Save">
+
+}
