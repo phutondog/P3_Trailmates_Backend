@@ -1,6 +1,7 @@
 package com.revature.trailmates.auth.dtos.response;
 
 
+import com.revature.trailmates.user.User;
 
 public class Principal {
 
@@ -13,12 +14,12 @@ public class Principal {
         super();
     }
 
-    /*public Principal(User user) {
+    public Principal(User user) {
         this.token = null;
         this.id = user.getId();
         this.username = user.getUsername();
         this.role = user.getRole();
-    }*/
+    }
 
     public Principal(String id, String username, String role) {
         this.id = id;

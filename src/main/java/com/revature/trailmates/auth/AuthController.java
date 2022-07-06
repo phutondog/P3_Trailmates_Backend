@@ -1,4 +1,5 @@
 package com.revature.trailmates.auth;
+import com.revature.trailmates.auth.dtos.requests.LoginRequest;
 import com.revature.trailmates.auth.dtos.response.Principal;
 import com.revature.trailmates.util.annotations.Inject;
 import com.revature.trailmates.util.custom_exception.AuthenticationException;
@@ -20,28 +21,35 @@ import java.util.Map;
 public class AuthController {
 
     //todo fix authcontroller and principal class when user is added
+    //todo talk about email verification and account activation
 
     @Inject
-    //private final UserService userService;
+    private final AuthService authService;
     private final TokenService tokenService;
 
     @Inject
     @Autowired
-    public AuthController(TokenService tokenService) {
-        //this.userService = userService;
+    public AuthController(AuthService authService,TokenService tokenService) {
+        this.authService = authService;
         this.tokenService = tokenService;
     }
 
-    /*@CrossOrigin
+    /**
+     * Returns a principal containing the login token when given an appropriate login request
+     * @param request A JSON object containing the username and password of the user
+     * @param resp The servelet response that the header wil be
+     * @return Returns a principal with token
+     */
+    @CrossOrigin
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Principal login(@RequestBody LoginRequest request, HttpServletResponse resp) {
-        Principal principal = new Principal(userService.login(request));
+        Principal principal = new Principal(authService.login(request));
         String token = tokenService.generateToken(principal);
         principal.setToken(token);
         resp.setHeader("Authorization", token);
         return principal;
-    }*/
+    }
 
     //region Exception Handlers
     @ExceptionHandler
