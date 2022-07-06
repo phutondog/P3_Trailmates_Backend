@@ -30,8 +30,12 @@ public class Trail {
     private Boolean doFeesApply;
     @Column(name="duration")
     private String duration;
+    @Column(name="states")
+    private String states;
+    @Column(name="park_code")
+    private String parkCode;
 
-    public Trail(String id, String name, String short_desc, String long_desc, String image_url, String website_url, Boolean isReservationRequired, Boolean arePetsPermitted, Boolean doFeesApply, String duration) {
+    public Trail(String id, String name, String short_desc, String long_desc, String image_url, String website_url, Boolean isReservationRequired, Boolean arePetsPermitted, Boolean doFeesApply, String duration, String states, String parkCode) {
         this.id = id;
         this.name = name;
         this.short_desc = short_desc;
@@ -42,6 +46,8 @@ public class Trail {
         this.arePetsPermitted = arePetsPermitted;
         this.doFeesApply = doFeesApply;
         this.duration = duration;
+        this.states = states;
+        this.parkCode = parkCode;
     }
 
     public Trail() { }
@@ -127,6 +133,23 @@ public class Trail {
     public void setDuration(String duration) {
         this.duration = duration;
     }
+
+    public String getStates() {
+        return states;
+    }
+
+    public void setStates(String states) {
+        this.states = states;
+    }
+
+    public String getParkCode() {
+        return parkCode;
+    }
+
+    public void setParkCode(String parkCode) {
+        this.parkCode = parkCode;
+    }
+
     //</editor-fold>
 
 }

@@ -93,6 +93,8 @@ public class TrailService {
         trail.setArePetsPermitted(getPetsPermitted(content));
         trail.setDoFeesApply(getFeesApply(content));
         trail.setDuration(getDuration(content));
+        trail.setStates(getState(content));
+        trail.setParkCode(getParkCode(content));
 
         return trail;
     }
@@ -153,7 +155,20 @@ public class TrailService {
         return duration;
     }
 
+    private String getState(JsonNode content) {
+        String state = "";
+        if (content.at("/relatedParks").get(0) != null)
+            state = content.at("/relatedParks").get(0).get("states").asText();
+        return state;
+    }
+    private String getParkCode(JsonNode content) {
+        String code = "";
+        if (content.at("/relatedParks").get(0) != null)
+            code = content.at("/relatedParks").get(0).get("parkCode").asText();
+        return code;
+    }
+
     public void addTrail(Trail trail) {
-        trailRepository.saveTrailName(trail.getId(), trail.getName(), trail.getShort_desc(), trail.getLong_desc(), trail.getImage_url(), trail.getWebsite_url(), trail.getReservationRequired(), trail.getArePetsPermitted(), trail.getDoFeesApply(), trail.getDuration());
+        trailRepository.saveTrailName(trail.getId(), trail.getName(), trail.getShort_desc(), trail.getLong_desc(), trail.getImage_url(), trail.getWebsite_url(), trail.getReservationRequired(), trail.getArePetsPermitted(), trail.getDoFeesApply(), trail.getDuration(), trail.getStates(), trail.getParkCode());
     }
 }
