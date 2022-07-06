@@ -1,8 +1,13 @@
 package com.revature.trailmates.user;
 
+import com.revature.trailmates.auth.AuthService;
 import com.revature.trailmates.user.dtos.requests.EditUserRequest;
 import com.revature.trailmates.util.annotations.Inject;
+import com.revature.trailmates.util.custom_exception.InvalidRequestException;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -32,14 +37,24 @@ public class UserService {
 
         boolean isPasswordChanged = false;
 
-        if (!request.getEmail().equals("")) currentUser.setEmail(request.getEmail());
+        if (!request.getEmail().equals("")) {
+            if (new AuthService(userRepository).isValidEmail(request.getEmail()))
+                currentUser.setEmail(request.getEmail());
+            else{
+                //FAIL!
+                throw new InvalidRequestException("Email invalid!"); //Change to 406 later.
+            }
+        }
 
 //        if (!request.getPassword().equals("")){
 //            isPasswordChanged = true;
 //            currentUser.setPassword(request.getPassword());
 //        }
 
-        if (!request.getBio().equals("")) currentUser.setBio(request.getBio());
+        if (!request.getBio().equals("") ) {
+            if (request.getBio().length() < 255) currentUser.setBio(request.getBio());
+            else throw new InvalidRequestException("Bio must be less than 255 characters!");
+        }
 
         if (request.getAge() > 13) currentUser.setAge(request.getAge());
 
