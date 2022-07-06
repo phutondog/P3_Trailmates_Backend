@@ -25,10 +25,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping(value = "/edit", consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PutMapping(value = "/edit", consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody User editUser(@RequestBody EditUserRequest request) {
         return userService.UpdateUser(request);
     }
+
+    
 
 }

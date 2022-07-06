@@ -1,5 +1,7 @@
 package com.revature.trailmates.user;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 import javax.persistence.*;
 
 

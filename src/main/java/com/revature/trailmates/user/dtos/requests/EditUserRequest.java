@@ -13,6 +13,7 @@ public class EditUserRequest {
     private String bio;
     private int age;
 
+    public EditUserRequest(){}
     public EditUserRequest(String id, String username, String password, String email, String role, String bio, int age) {
         this.id = id;
         this.username = username;

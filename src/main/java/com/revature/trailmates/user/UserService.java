@@ -3,9 +3,14 @@ package com.revature.trailmates.user;
 import com.revature.trailmates.user.dtos.requests.EditUserRequest;
 import com.revature.trailmates.util.annotations.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 
 //This is the class used for interacting with users.
+@Service
+@Transactional
 public class UserService {
 
     @Inject
@@ -47,9 +52,8 @@ public class UserService {
 //        }
 
         //currentUser.setIs_active(request.isIs_active());
-
         userRepository.updateUser(currentUser.getEmail(), currentUser.getBio(), currentUser.getAge(), currentUser.getId());//, isPasswordChanged);
-        currentUser.setPassword("");
+
         return currentUser;
     }
 
