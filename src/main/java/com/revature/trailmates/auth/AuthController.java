@@ -37,8 +37,8 @@ public class AuthController {
     /**
      * Returns a principal containing the login token when given an appropriate login request
      * @param request A JSON object containing the username and password of the user
-     * @param resp The servelet response that the header wil be
-     * @return Returns a principal with token
+     * @param resp The servelet response that the header will be
+     * @return Returns a principal with a token
      */
     @CrossOrigin
     @ResponseStatus(HttpStatus.ACCEPTED)

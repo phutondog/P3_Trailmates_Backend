@@ -64,6 +64,7 @@ public class AuthService {
         try {
             Field[] fields = com.revature.trailmates.auth.dtos.requests.NewUserRequest.class.getDeclaredFields();
             for (Field field : fields) {
+                field.setAccessible(true);
                 if (field.get(request) == null) {
                     if(!eMessage.isEmpty()){
                         eMessage += ", ";
