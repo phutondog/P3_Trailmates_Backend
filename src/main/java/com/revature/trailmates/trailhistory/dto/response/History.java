@@ -2,6 +2,9 @@ package com.revature.trailmates.trailhistory.dto.response;
 
 import java.sql.Date;
 
+/**
+ * this class will be used to return history objects
+ */
 public class History {
 
     private String trailName;
