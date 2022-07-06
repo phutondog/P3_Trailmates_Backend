@@ -1,12 +1,37 @@
 package com.revature.trailmates.trails;
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "trails")
 public class Trail {
 
-    private String id, name, short_desc, long_desc, image_url, website_url;
-    private Boolean isReservationRequired, arePetsPermitted, doFeesApply;
-    private int duration;
+    @Id
+    private String id;
+    @Column(name="name", nullable = false)
+    private String name;
+    @Column(name="short_desc", columnDefinition = "TEXT")
+    private String short_desc;
+    @Column(name="long_desc", columnDefinition = "TEXT")
+    private String long_desc;
+    @Column(name="image_url")
+    private String image_url;
+    @Column(name="website_url")
+    private String website_url;
+    @Column(name="is_reservation_required")
+    private Boolean isReservationRequired;
+    @Column(name="are_pets_permitted")
+    private Boolean arePetsPermitted;
+    @Column(name="do_fees_apply")
+    private Boolean doFeesApply;
+    @Column(name="duration")
+    private String duration;
 
-    public Trail(String id, String name, String short_desc, String long_desc, String image_url, String website_url, Boolean isReservationRequired, Boolean arePetsPermitted, Boolean doFeesApply, int duration) {
+    public Trail(String id, String name, String short_desc, String long_desc, String image_url, String website_url, Boolean isReservationRequired, Boolean arePetsPermitted, Boolean doFeesApply, String duration) {
         this.id = id;
         this.name = name;
         this.short_desc = short_desc;
@@ -95,11 +120,11 @@ public class Trail {
         this.doFeesApply = doFeesApply;
     }
 
-    public int getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
     //</editor-fold>

@@ -23,7 +23,15 @@ public class TrailController {
 
     @CrossOrigin
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Trail getTrailById(@PathVariable String id) { return trailService.createTrail(id); }
+    public @ResponseBody Trail getTrailById(@PathVariable String id) { return trailService.getTrailAPI(id); }
+
+    @CrossOrigin
+    @GetMapping(value = "/getAll/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Trail> getAllTrails(@PathVariable int page) { return trailService.getAllTrailsAPI(page); }
+
+    @CrossOrigin
+    @GetMapping(value = "search/{search_name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Trail> searchTrailByName(@PathVariable String search_name) { return trailService.searchTrailByName(search_name, 0); }
 
 
 }
