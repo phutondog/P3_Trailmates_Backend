@@ -38,11 +38,11 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "/edit", consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody void editUser(@RequestHeader("Authorization") String token, @RequestBody EditUserRequest request) {
+    public @ResponseBody User editUser(@RequestHeader("Authorization") String token, @RequestBody EditUserRequest request) {
         Principal principal = new TokenService().extractRequesterDetails(token);
         if (principal.getId() == null) throw new UnauthorizedException();
 
-        userService.UpdateUser(principal.getId(), request);
+        return userService.UpdateUser(principal.getId(), request);
     }
 
     //region Exception Handlers
