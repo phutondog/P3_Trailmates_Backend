@@ -10,7 +10,7 @@ import java.util.UUID;
 @Table(name = "trail_flags")
 public class TrailFlag {
     @Id
-    private String entry_id;
+    private String id;
     @Column(name = "trail_id", nullable=false)
     private String trail_id;
 
@@ -25,19 +25,19 @@ public class TrailFlag {
     }
 
     public TrailFlag(NewTrailFlagRequest request) {
-        this.entry_id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString();
         this.trail_id = request.getTrail_id();
         this.user_id = new User();
         this.user_id.setId(request.getUser_id());
         this.date_int = request.getDate_int();
     }
 
-    public String getEntry_id() {
-        return entry_id;
+    public String get_Id() {
+        return id;
     }
 
-    public void setEntry_id(String entry_id) {
-        this.entry_id = entry_id;
+    public void set_Id(String entry_id) {
+        this.id = entry_id;
     }
 
     public String getTrail_id() {
