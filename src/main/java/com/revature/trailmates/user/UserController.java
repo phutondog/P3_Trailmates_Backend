@@ -1,7 +1,11 @@
-package com.revature.trailmates.auth;
-import com.revature.trailmates.auth.dtos.requests.LoginRequest;
-import com.revature.trailmates.auth.dtos.response.Principal;
-import com.revature.trailmates.util.annotations.Inject;
+package com.revature.trailmates.user;
+
+
+//This is the class that wraps servlets for all netcode
+
+
+import com.revature.trailmates.user.dtos.requests.EditUserRequest;
+import com.revature.trailmates.util.annotations.*;
 import com.revature.trailmates.util.custom_exception.AuthenticationException;
 import com.revature.trailmates.util.custom_exception.InvalidRequestException;
 import com.revature.trailmates.util.custom_exception.ResourceConflictException;
@@ -9,46 +13,30 @@ import com.revature.trailmates.util.custom_exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/auth")
-public class AuthController {
-
-    //todo fix authcontroller and principal class when user is added
-    //todo talk about email verification and account activation
-
+@RequestMapping("/user")
+public class UserController {
     @Inject
-    private final AuthService authService;
-    private final TokenService tokenService;
+    private final UserService userService;
 
     @Inject
     @Autowired
-    public AuthController(AuthService authService,TokenService tokenService) {
-        this.authService = authService;
-        this.tokenService = tokenService;
+    public UserController(UserService userService){
+        this.userService = userService;
     }
 
-    /**
-     * Returns a principal containing the login token when given an appropriate login request
-     * @param request A JSON object containing the username and password of the user
-     * @param resp The servelet response that the header wil be
-     * @return Returns a principal with token
-     */
-    @CrossOrigin
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Principal login(@RequestBody LoginRequest request, HttpServletResponse resp) {
-        Principal principal = new Principal(authService.login(request));
-        String token = tokenService.generateToken(principal);
-        principal.setToken(token);
-        resp.setHeader("Authorization", token);
-        return principal;
+    @PutMapping(value = "/edit", consumes="application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody User editUser(@RequestBody EditUserRequest request) {
+        return userService.UpdateUser(request);
     }
 
     //region Exception Handlers
@@ -99,4 +87,6 @@ public class AuthController {
         return responseBody;
     }
     //endregion
+
+
 }
