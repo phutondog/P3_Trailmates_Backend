@@ -1,6 +1,7 @@
 package com.revature.trailmates.trailhistory;
 
 
+import com.revature.trailmates.trails.Trail;
 import com.revature.trailmates.user.User;
 
 import javax.persistence.*;
@@ -28,7 +29,7 @@ public class TrailHistory {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "trail_id", referencedColumnName = "id")
-    private String trail;
+    private Trail trail;
 
     public TrailHistory() {
         super();
@@ -66,11 +67,11 @@ public class TrailHistory {
         this.user = user;
     }
 
-    public String getTrail() {
+    public Trail getTrail() {
         return trail;
     }
 
-    public void setTrail(String trail) {
+    public void setTrail(Trail trail) {
         this.trail = trail;
     }
 
