@@ -25,24 +25,30 @@ public class TrailService {
         this.trailRepository = trailRepository;
     }
 
-    public List<Trail> searchTrailByName(String name) {
-        List<Trail> trails = trailRepository.getAllTrails();
+    public List<Trail> searchTrailByName(String name, int page) {
+        List<Trail> allTrails = trailRepository.getAllTrails();
         List<Trail> searchedTrails = new ArrayList<>();
 
-        for (int i = 0; i < trails.size(); i++) {
+        for (int i = 0; i < allTrails.size(); i++) {
             try {
-                if (trails.get(i).getName().toLowerCase().contains(name.toLowerCase())) searchedTrails.add(trails.get(i));
+                if (allTrails.get(i).getName().toLowerCase().contains(name.toLowerCase())) searchedTrails.add(allTrails.get(i));
             } catch (IndexOutOfBoundsException ignore) { }
         }
-        return searchedTrails;
-    }
 
-    public Optional<Trail> getTrail(String id) {
-        return trailRepository.findById(id);
-    }
+        List<Trail> trails = new ArrayList<>();
+        int total = searchedTrails.size() - (page * 10);
+        if (total > 10) {
+            for (int i = 0; i < 10; i++) {
+                trails.add(searchedTrails.get(page*10 + i));
+            }
+        }
 
-    public List<Trail> getAllTrails() {
-        return trailRepository.getAllTrails();
+        else if (total > 0){
+            for (int i = 0; i < total; i++) {
+                trails.add(searchedTrails.get(page*10 + i));
+            }
+        }
+        return trails;
     }
 
     public List<Trail> getAllTrailsPage(int page) {
@@ -62,6 +68,12 @@ public class TrailService {
         }
         return trails;
     }
+
+    public Optional<Trail> getTrail(String id) { return trailRepository.findById(id); }
+    public List<Trail> getAllTrails() { return trailRepository.getAllTrails(); }
+
+    //<editor-fold desc="Functions Connected to the NPS Trail API">
+
 
     public List<Trail> getAllTrailsAPI(int page) {
         JsonNode content = trailAPIConnector.getAllPlainJSON(page);
@@ -173,6 +185,7 @@ public class TrailService {
             code = content.at("/relatedParks").get(0).get("parkCode").asText();
         return code;
     }
+    //</editor-fold>
 
     public void addTrail(Trail trail) {
         trailRepository.saveTrailName(trail.getId(), trail.getName(), trail.getShort_desc(), trail.getLong_desc(), trail.getImage_url(), trail.getWebsite_url(), trail.getReservationRequired(), trail.getArePetsPermitted(), trail.getDoFeesApply(), trail.getDuration(), trail.getStates(), trail.getParkCode());
