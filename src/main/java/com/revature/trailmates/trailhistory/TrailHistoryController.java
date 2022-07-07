@@ -1,7 +1,9 @@
-package com.revature.trailmates.auth;
-import com.revature.trailmates.auth.dtos.requests.LoginRequest;
-import com.revature.trailmates.auth.dtos.requests.NewUserRequest;
+package com.revature.trailmates.trailhistory;
+
+
+import com.revature.trailmates.auth.TokenService;
 import com.revature.trailmates.auth.dtos.response.Principal;
+import com.revature.trailmates.trailhistory.dto.response.History;
 import com.revature.trailmates.util.annotations.Inject;
 import com.revature.trailmates.util.custom_exception.AuthenticationException;
 import com.revature.trailmates.util.custom_exception.InvalidRequestException;
@@ -12,61 +14,55 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
-public class AuthController {
-
-    //todo fix authcontroller and principal class when user is added
-    //todo talk about email verification and account activation
-
-    @Inject
-    private final AuthService authService;
-    private final TokenService tokenService;
+@RequestMapping("/history")
+public class TrailHistoryController {
 
     @Inject
     @Autowired
-    public AuthController(AuthService authService,TokenService tokenService) {
-        this.authService = authService;
-        this.tokenService = tokenService;
+    private TrailHistoryService trailHistoryService;
+
+    @Autowired
+    private TokenService tokenService;
+
+    public TrailHistoryController() {
+        super();
     }
 
     /**
-     * Returns a principal containing the login token when given an appropriate login request
-     * @param request A JSON object containing the username and password of the user
-     * @param resp The servelet response that the header will be
-     * @return Returns a principal with a token
+     * @return returns a list of history sorted in descending order
      */
-    @CrossOrigin
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Principal login(@RequestBody LoginRequest request, HttpServletResponse resp) {
-        Principal principal = new Principal(authService.login(request));
-        String token = tokenService.generateToken(principal);
-        principal.setToken(token);
-        resp.setHeader("Authorization", token);
-        return principal;
+    @CrossOrigin
+    @GetMapping(path = "/desc", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<History> descendingTrailHistory(@RequestHeader("Authorization") String token){
+        Principal user = tokenService.noTokenThrow(token);
+        return trailHistoryService.getDescHistory(user.getId());
     }
 
     /**
-     * Creates a new user in the users table based on the attributes of the newUserRequest JSON
-     * @param newUserRequest A JSON object containing the details to create a new user
+     * @return returns a list of history sorted in ascending order
      */
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @CrossOrigin
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/newuser",consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void createUser(@RequestBody NewUserRequest newUserRequest){
-        authService.register(newUserRequest);
+    @GetMapping(path = "/asc", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    List<History> ascendingTrailHistory(@RequestHeader("Authorization") String token){
+        Principal user = tokenService.noTokenThrow(token);
+        return trailHistoryService.getAscHistory(user.getId());
     }
+
 
     //region Exception Handlers
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public @ResponseBody Map<String, Object> handleUnauthorizedException(UnauthorizedException e){
+    public @ResponseBody
+    Map<String, Object> handleUnauthorizedException(UnauthorizedException e){
         Map<String, Object> responseBody = new LinkedHashMap<>();
         responseBody.put("status", 401);
         responseBody.put("message", e.getMessage());
@@ -94,13 +90,7 @@ public class AuthController {
         return responseBody;
     }
 
-    /**
-     * Catches any exceptions in other methods and returns status code 409 if
-     * a ResourceConflictException occurs.
-     * @param e The resource conflict request being thrown
-     * @return A map containing the status code, error message, and timestamp of
-     * when the error occurred.
-     */
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public @ResponseBody Map<String, Object> handleResourceConflictException(ResourceConflictException e){
@@ -110,5 +100,4 @@ public class AuthController {
         responseBody.put("timestamp", LocalDateTime.now().toString());
         return responseBody;
     }
-    //endregion
 }
