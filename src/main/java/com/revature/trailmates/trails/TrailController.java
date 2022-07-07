@@ -1,4 +1,4 @@
-package com.revature.trailmates.auth.dtos.trails;
+package com.revature.trailmates.trails;
 
 import com.revature.trailmates.util.annotations.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
