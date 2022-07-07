@@ -57,4 +57,14 @@ public class TrailController {
     @GetMapping(value = "search/{page}/{search_name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Trail> searchTrailByName(@PathVariable("search_name") String search_name, @PathVariable("page") int page) { return trailService.searchTrailByName(search_name, page); }
 
+    /**
+     * Returns a List of Trails that fit the State search criteria on a specified page
+     * @param state The state value user is inserting
+     * @param page The page the user is on
+     * @return List<Trail> A List of 10 trails or less if on the last page
+     */
+    @CrossOrigin
+    @GetMapping(value = "searchState/{page}/{state}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Trail> searchTrailByState(@PathVariable("state") String state, @PathVariable("page") int page) { return trailService.searchTrailByState(state, page); }
+
 }

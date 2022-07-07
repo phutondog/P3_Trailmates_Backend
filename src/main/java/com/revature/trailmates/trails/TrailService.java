@@ -25,6 +25,32 @@ public class TrailService {
         this.trailRepository = trailRepository;
     }
 
+    public List<Trail> searchTrailByState(String state, int page) {
+        List<Trail> allTrails = trailRepository.getAllTrails();
+        List<Trail> searchedTrails = new ArrayList<>();
+
+        for (int i = 0; i < allTrails.size(); i++) {
+            try {
+                if (allTrails.get(i).getStates().toLowerCase().contains(state.toLowerCase())) searchedTrails.add(allTrails.get(i));
+            } catch (IndexOutOfBoundsException ignore) { }
+        }
+
+        List<Trail> trails = new ArrayList<>();
+        int total = searchedTrails.size() - (page * 10);
+        if (total > 10) {
+            for (int i = 0; i < 10; i++) {
+                trails.add(searchedTrails.get(page*10 + i));
+            }
+        }
+
+        else if (total > 0){
+            for (int i = 0; i < total; i++) {
+                trails.add(searchedTrails.get(page*10 + i));
+            }
+        }
+        return trails;
+    }
+
     public List<Trail> searchTrailByName(String name, int page) {
         List<Trail> allTrails = trailRepository.getAllTrails();
         List<Trail> searchedTrails = new ArrayList<>();
