@@ -1,5 +1,6 @@
 package com.revature.trailmates.auth;
 import com.revature.trailmates.auth.dtos.requests.LoginRequest;
+import com.revature.trailmates.auth.dtos.requests.NewUserRequest;
 import com.revature.trailmates.auth.dtos.response.Principal;
 import com.revature.trailmates.util.annotations.Inject;
 import com.revature.trailmates.util.custom_exception.AuthenticationException;
@@ -37,8 +38,8 @@ public class AuthController {
     /**
      * Returns a principal containing the login token when given an appropriate login request
      * @param request A JSON object containing the username and password of the user
-     * @param resp The servelet response that the header wil be
-     * @return Returns a principal with token
+     * @param resp The servelet response that the header will be
+     * @return Returns a principal with a token
      */
     @CrossOrigin
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -49,6 +50,17 @@ public class AuthController {
         principal.setToken(token);
         resp.setHeader("Authorization", token);
         return principal;
+    }
+
+    /**
+     * Creates a new user in the users table based on the attributes of the newUserRequest JSON
+     * @param newUserRequest A JSON object containing the details to create a new user
+     */
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = "/newuser",consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void createUser(@RequestBody NewUserRequest newUserRequest){
+        authService.register(newUserRequest);
     }
 
     //region Exception Handlers
