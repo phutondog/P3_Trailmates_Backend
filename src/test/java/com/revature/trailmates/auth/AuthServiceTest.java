@@ -31,18 +31,69 @@ class AuthServiceTest {
     NewUserRequest newUserRequest;
 
     @Test
-    void login() {
-        loginRequest.setUsername("test");
-        loginRequest.setPassword("test");
-
-        //Mockito.verify(loginRequest).setUsername("test");
+    void loginSuccess() {
+        // Arrange
+        loginRequest.setUsername("testUser001");
+        loginRequest.setPassword("P@ssw0rd");
 
         User dummy = new User();
-        dummy.setUsername("test");
+        dummy.setUsername("testUser001");
 
-        Mockito.when(userRepository.getUserByUsername(loginRequest.getUsername())).thenReturn(dummy);
-        assertEquals(dummy, authService.login(loginRequest));
+        Mockito.when(userRepository.getUserByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword())).thenReturn(dummy);
+
+        // Act
+        User test = authService.login(loginRequest);
+
+        // Assert
+        assertEquals(dummy, test);
     }
+
+    @Test
+    void invalidUsername(){
+        // Arrange
+        loginRequest.setUsername("testUser001");
+        loginRequest.setPassword("P@ssw0rd");
+
+        // Act
+
+
+        // Assert
+    }
+
+    @Test
+    void invalidPassword(){
+        // Arrange
+
+
+        // Act
+
+
+        // Assert
+    }
+
+    @Test
+    void invalidEmail(){
+        // Arrange
+
+
+        // Act
+
+
+        // Assert
+    }
+
+    @Test
+    void usernameAlreadyExists(){
+        // Arrange
+
+
+        // Act
+
+
+        // Assert
+    }
+
+    //Mockito.verify(loginRequest).setUsername("test");
 
     @Test
     void register() {
@@ -59,4 +110,6 @@ class AuthServiceTest {
     void isValidEmail() {
 
     }
+
+
 }
