@@ -25,10 +25,10 @@ class AuthServiceTest {
     private AuthService authService;
 
     @Spy
-    LoginRequest loginRequest;
+    private LoginRequest loginRequest;
 
     @Spy
-    NewUserRequest newUserRequest;
+    private NewUserRequest newUserRequest;
 
     @Test
     void loginSuccess() {
@@ -48,68 +48,100 @@ class AuthServiceTest {
         assertEquals(dummy, test);
     }
 
+    //region Register Tests
     @Test
     void invalidUsername(){
         // Arrange
-        loginRequest.setUsername("testUser001");
-        loginRequest.setPassword("P@ssw0rd");
+        newUserRequest.setUsername("test");
+        newUserRequest.setPassword("P@ssw0rd");
+        newUserRequest.setEmail("test@testmail.com");
+        newUserRequest.setBio("Test user");
+        newUserRequest.setAge(20);
 
         // Act
-
+        Exception exception = assertThrows(RuntimeException.class, () -> authService.register(newUserRequest));
+        String expectedMessage = "Invalid username, must be 8-20 characters long and no special characters except _ and .";
+        String actualMessage = exception.getMessage();
 
         // Assert
+        assertTrue(actualMessage.equals(expectedMessage));
     }
 
     @Test
     void invalidPassword(){
         // Arrange
+        newUserRequest.setUsername("testUser001");
+        newUserRequest.setPassword("password");
+        newUserRequest.setEmail("test@testmail.com");
+        newUserRequest.setBio("Test user");
+        newUserRequest.setAge(20);
 
 
         // Act
-
+        Exception exception = assertThrows(RuntimeException.class, () -> authService.register(newUserRequest));
+        String expectedMessage = "Invalid password, must be longer than 8 characters and contain one number, one special character, and one alphabetical character";
+        String actualMessage = exception.getMessage();
 
         // Assert
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
     void invalidEmail(){
         // Arrange
-
+        newUserRequest.setUsername("testUser001");
+        newUserRequest.setPassword("P@ssw0rd");
+        newUserRequest.setEmail("email");
+        newUserRequest.setBio("Test user");
+        newUserRequest.setAge(20);
 
         // Act
-
+        Exception exception = assertThrows(RuntimeException.class, () -> authService.register(newUserRequest));
+        String expectedMessage = "Invalid email, must be a valid email address";
+        String actualMessage = exception.getMessage();
 
         // Assert
+        assertTrue(actualMessage.equals(expectedMessage));
     }
 
     @Test
     void usernameAlreadyExists(){
         // Arrange
+        newUserRequest.setUsername("testUser001");
+        newUserRequest.setPassword("P@ssw0rd");
+        newUserRequest.setEmail("test@testmail.com");
+        newUserRequest.setBio("Test user");
+        newUserRequest.setAge(20);
 
+        User dummy = new User();
+        dummy.setUsername("testUser001");
+
+        Mockito.when(userRepository.getUserByUsername(newUserRequest.getUsername())).thenReturn(dummy);
 
         // Act
-
+        Exception exception = assertThrows(RuntimeException.class, () -> authService.register(newUserRequest));
+        String expectedMessage = "This username is already taken";
+        String actualMessage = exception.getMessage();
 
         // Assert
+        assertTrue(actualMessage.equals(expectedMessage));
     }
 
-    //Mockito.verify(loginRequest).setUsername("test");
-
     @Test
-    void register() {
+    void newUserRequestHasNullFields() {
+        // Arrange
         newUserRequest.setUsername("test");
 
+        // Act
         Exception exception = assertThrows(RuntimeException.class, () -> authService.register(newUserRequest));
         String expectedMessage = " is null";
         String actualMessage = exception.getMessage();
 
+        // Assert
         assertTrue(actualMessage.contains(expectedMessage));
     }
+    //endregion
 
-    @Test
-    void isValidEmail() {
-
-    }
 
 
 }
