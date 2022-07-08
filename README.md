@@ -5,7 +5,7 @@
 A user logs on to trailmates.com looking for a buddy to hike, they search up a specific trail in the hiking search bar.<br>
 Then the user flags that they want to do the hike and see other people that want to do the hike in a similar time frame.<br>
 The user then messages another user asking to go on a hike. The other user gets a notification from the original user<br>
-who messaged them, and they set up the hiking plan from there.
+who messaged them, and they set up the hiking plan from ther
 
 ## MVP
 #### USER
